@@ -1,0 +1,7 @@
+--- # this is a valid YAML file syntax
+title: This is a test post. # comments are written like this
+path: first-post
+date: Test test test
+description: In a world where young people run abundant, there is a lack of free thinking. Here's a toast to free thinking!
+hits: 0
+...

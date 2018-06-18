@@ -1,0 +1,22 @@
+/* very generic styles */
+* {
+  display: border-box;
+}
+body, html {
+  margin: 0;
+  padding: 0;
+}
+body {
+
+}
+html {
+
+}
+
+/* header styles */
+#header {
+  display: fixed;
+  top: 0;
+  height: 3em;
+  background-color: lightgrey;
+}
