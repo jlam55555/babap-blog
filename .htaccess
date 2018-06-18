@@ -1,0 +1,2 @@
+# this is in use for hosting
+ErrorDocument 404 /index.html
