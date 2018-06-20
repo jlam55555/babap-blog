@@ -14,13 +14,18 @@ function get(url, callback, json = true) {
 }
 
 /**
+  * global constants
+  */
+const PAGETITLE = 'BABAP';
+
+/**
   * component for posts page (list)
   */
 let PostsComponent = {
   template: `<div id='container'>
   <div v-if='posts.length == 0'>Loading&hellip;</div>
   <div v-else>
-    <a class='post-item' v-for='post in posts' v-bind:href='"/posts/" + post.path'>
+    <a class='post-item noLink' v-for='post in posts' @click='$parent.changeRoute("/posts/" + post.path)'>
       <div>Title: {{ post.title }}</div>
       <div>Post id: {{ post.id }}</div>
       <div>Description: {{ post.description }}</div>
@@ -54,7 +59,7 @@ let PostComponent = {
   </div>
   <div v-else v-html='postBody'></div>
   <div>
-    <a href='/'>Return home.</a>
+    <a @click='$parent.changeRoute("/posts")'>Return home.</a>
   </div>
 </div>`,
   data() {
@@ -68,6 +73,7 @@ let PostComponent = {
   created() {
     get('/scripts/getPostData.php?postName=' + this.postName, postData => {
       this.postMetadata = postData.metadata;
+      document.title = PAGETITLE + ' | ' + this.postMetadata.title;
       this.postBody = this.converter.makeHtml(postData.body);
     });
   }
@@ -101,33 +107,50 @@ let PageNotFoundComponent = {
 }
 
 /**
-  * routing components
+  * simple router
+  * <p>
+  * features:
+  * - regex to match components
+  * - page title when navigated
+  * - ability to change route without reload (can be called from other components)
+  * - save state in history for forward/back navigation
   */
 let routes = [
-  { regex: /^\/?$/, component: PostsComponent },
-  { regex: /^\/posts\/?$/, component: PostsComponent },
-  { regex: /^\/posts\/[a-z\-]+$/, component: PostComponent },
-  { regex: /^\/map\/?$/, component: MapComponent },
-  { regex: /^\/about\/?$/, component: AboutComponent }
+  { regex: /^(\/posts)?\/?$/, component: PostsComponent, title: PAGETITLE },
+  { regex: /^\/posts\/[a-z\-]+$/, component: PostComponent, title: PAGETITLE + ' | Post' },
+  { regex: /^\/map\/?$/, component: MapComponent, title: PAGETITLE + ' | Map' },
+  { regex: /^\/about\/?$/, component: AboutComponent, title: PAGETITLE + ' | About' }
 ];
 let RouterComponent = {
   data() {
     return {
-      activatedRoute: window.location.pathname.toLowerCase()
+      activatedRoute: window.location.pathname.toLowerCase(),
+      changeRoute: function(newRoute) {
+        this.activatedRoute = newRoute;
+        history.pushState(this.activatedRoute, '', newRoute);
+      }
     };
   },
   computed: {
     ViewComponent() {
       for(let route of routes) {
         if(route.regex.test(this.activatedRoute)) {
+          document.title = route.title;
           return route.component;
         }
       }
+      document.title = PAGETITLE + ' | 404';
       return PageNotFoundComponent;
     }
   },
   render(createElement) {
     return createElement(this.ViewComponent);
+  },
+  created() {
+    // allow the back button to work
+    window.onpopstate = popStateData => {
+      this.activatedRoute = popStateData.state;
+    };
   }
 }
 

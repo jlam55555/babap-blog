@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
   <head>
     <meta charset='utf-8'>
-    <title>Jessica's Blog</title>
+    <meta name='description' content='A blog built for the modern reader! (alpha)'>
+    <meta name='keywords' content='babap, blog, jessica lam, jonathan lam, interactive, modern, lam'>
+    <meta name='author' content='Jonathan Lam <jonathanlamdev@gmail.com> (http://www.jonathanlam.tech)'>
+    <title>BABAP</title>
     <script src='https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
     <script src='/main.js' defer></script>
@@ -13,9 +16,9 @@
       <!-- header -->
       <div id='header'>
         <nav id='nav-bar'>
-          <a href='/posts'>Posts</a>
-          <a href='/map'>Map</a>
-          <a href='/about'>About</a>
+          <a @click='$children[0].changeRoute("/posts")'>Posts</a>
+          <a @click='$children[0].changeRoute("/map")'>Map</a>
+          <a @click='$children[0].changeRoute("/about")'>About</a>
         </nav>
       </div>
 

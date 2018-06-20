@@ -13,10 +13,27 @@ html {
 
 }
 
+/* default basic tag styles */
+a {
+  cursor: pointer;
+}
+a:not(.noLink) {
+  color: blue;
+  text-decoration: underline;
+}
+
 /* header styles */
 #header {
   display: fixed;
   top: 0;
   height: 3em;
   background-color: lightgrey;
+}
+
+/* post list styles (/posts) */
+.post-item {
+  display: block;
+  border: 1px solid black;
+  margin: 1em;
+  padding: 1em;
 }

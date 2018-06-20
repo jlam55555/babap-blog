@@ -1,0 +1,7 @@
+--- # this is a valid YAML file syntax
+title: Second post
+path: second-post
+date: test test test test
+description: This is a second post so that there is a list on the posts page
+hits: 0
+...
