@@ -1,2 +1,9 @@
-# this is in use for hosting
+# this file is in use for hosting
+
+# prevent bad urls when people type in ending slashes
+RedirectMatch ^/posts/$ /posts
+RedirectMatch ^/map/$ /map
+RedirectMatch ^/about/$ /about
+
+# send all pages to index.html
 ErrorDocument 404 /index.html
