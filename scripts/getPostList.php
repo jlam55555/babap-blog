@@ -4,9 +4,10 @@
   $paths = [];
   foreach(glob('../_posts/*.yaml') as $path) {
     // file data
+    $filename = explode('/', $path)[2];
     $metadataObject = [
-      'id' => (integer) explode('.', $path)[0],
-      'path' => explode('.', $path)[1]
+      'id' => (integer) explode('.', $filename)[0],
+      'path' => explode('.', $filename)[1]
     ];
 
     // get path contents

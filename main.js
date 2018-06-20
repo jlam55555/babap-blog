@@ -16,7 +16,7 @@ function get(url, callback, json = true) {
 /**
   * global constants
   */
-const PAGETITLE = 'BABAP';
+const PAGETITLE = 'BaBaP';
 
 /**
   * component for posts page (list)
@@ -25,19 +25,43 @@ let PostsComponent = {
   template: `<div id='container'>
   <div v-if='posts.length == 0'>Loading&hellip;</div>
   <div v-else>
-    <a class='post-item noLink' v-for='post in posts' @click='$parent.changeRoute("/posts/" + post.path)'>
-      <div>Title: {{ post.title }}</div>
-      <div>Post id: {{ post.id }}</div>
-      <div>Description: {{ post.description }}</div>
-      <div>Path: {{ post.path }}</div>
-      <div>Path: {{ post.hits }}</div>
+    <div id='search-sort-posts'>
+      <input
+        placeholder='Search'>
+      <span>Order by:</span>
+      <select v-model='postSort'>
+        <option value='dateNewOld'>date (new-old)</option>
+        <option value='dateOldNew'>date (old-new)</option>
+        <option value='viewsMostLeast'>views (most-least)</option>
+        <option value='alphaAZ'>alphabetical (A-Z)</option>
+        <option value='alphaZA'>alphabetical (Z-A)</option>
+      </select>
+    </div>
+    <a class='post-item noLink' v-for='post in postList' @click='$parent.changeRoute("/posts/" + post.path)'>
+      <div class='post-id'>{{ post.id }}</div>
+      <div class='post-info'>
+        <h3 class='post-title'>{{ post.title }}</h3>
+        <p class='post-description'>{{ post.description }}</p>
+        <div class='post-path'>/posts/{{ post.path }}</div>
+      </div>
     </a>
   </div>
 </div>`,
   data() {
     return {
-      posts: []
+      posts: [],
+      postSort: 'dateNewOld'
     };
+  },
+  computed: {
+    postList() {
+      switch(this.postSort) {
+        case 'dateNewOld':
+          return this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        case 'dateOldNew':
+          return this.posts.sort((a, b) => new Date(a.date) - new Date(b.date));
+      }
+    }
   },
   created() {
     // get post data
@@ -52,12 +76,20 @@ let PostsComponent = {
   */
 let PostComponent = {
   template: `<div id='container'>
-  POST: {{ postName }}
   <div v-if='postMetadata == null'>Loading&hellip;</div>
   <div v-else-if='postMetadata.error'>
     Error: {{ postMetadata.error  }}
   </div>
-  <div v-else v-html='postBody'></div>
+  <div v-else>
+    <h3 id='post-title'>{{ postMetadata.title }}</h3>
+    <p id='post-description'>{{ postMetadata.description }}</p>
+    <div id='post-date'>Published {{ postMetadata.date }}</div>
+    <div id='post-body' v-html='postBody'></div>
+    <div id='post-data'>
+      Post views: {{ postMetadata.hits }}<br>
+      Permalink: http://www.babap.co.nf/posts/{{ postMetadata.path }}
+    </div>
+  </div>
   <div>
     <a @click='$parent.changeRoute("/posts")'>Return home.</a>
   </div>
@@ -84,7 +116,8 @@ let PostComponent = {
   */
 let MapComponent = {
   template: `<div id='container'>
-  MAP
+  <h3>Map</h3>
+  <p>Sorry, BaBaP's interactive map has not been implemented yet.</p>
 </div>`
 };
 
@@ -93,7 +126,17 @@ let MapComponent = {
   */
 let AboutComponent = {
   template: `<div id='container'>
-  ABOUT
+  <div class='float-right'>
+    <img src='/assets/portrait.jpg'>
+    <figcaption>Here's an image. Your portrait could go here.</figcaption>
+  </div>
+  <h3>Meet the author!</h3>
+  <p>JEssica lam! *magic fingers* *confetti* *lights* *action* (i dunno, you put stuff here)</p>
+  <hr>
+  <h3>About BaBaP</h3>
+  <p>You're probably wondering, What is BaBaP? What does it stand for?</p>
+  <p>And the answer is, Not much. Something along the lines of Bits and Bytes and Pieces. Or Bits and Bites and Pieces. Or Bits and Bites and Peaces. Think peace signs, computers (bits and bytes), or cakes (bites and pieces). But it can mean anything that fits the acronym. In other words, it's free-form, in a modern way.</p>
+  <p>The main vision for BaBaP was to create an interactive experience. You can navigate this blog just as you navigate this world: walk around, enter homes or museums, talk to others. Perhaps you even take portals to your favorite exhibit, or to a random part of the world. Unfortunately, this part of BaBaP does not exist yet, in this very early stage.</p>
 </div>`
 };
 
@@ -102,7 +145,9 @@ let AboutComponent = {
   */
 let PageNotFoundComponent = {
   template: `<div id='container'>
-  PAGE NOT FOUND
+  <h3>Sorry. This page has been destroyed (or never existed).</h3>
+  <p>If you feel that this is a mistake, please contact the sitemaster (email address below).</p>
+  <a @click='$parent.changeRoute("/posts")'>Return to the homepage?</a>
 </div>`
 }
 
@@ -116,10 +161,10 @@ let PageNotFoundComponent = {
   * - save state in history for forward/back navigation
   */
 let routes = [
-  { regex: /^(\/posts)?\/?$/, component: PostsComponent, title: PAGETITLE },
-  { regex: /^\/posts\/[a-z\-]+$/, component: PostComponent, title: PAGETITLE + ' | Post' },
-  { regex: /^\/map\/?$/, component: MapComponent, title: PAGETITLE + ' | Map' },
-  { regex: /^\/about\/?$/, component: AboutComponent, title: PAGETITLE + ' | About' }
+  { regex: /^(\/posts)?\/?$/, component: PostsComponent, title: PAGETITLE, id: 0 },
+  { regex: /^\/posts\/[a-z\-]+$/, component: PostComponent, title: PAGETITLE + ' | Post', id: -1 },
+  { regex: /^\/map\/?$/, component: MapComponent, title: PAGETITLE + ' | Map', id: 1 },
+  { regex: /^\/about\/?$/, component: AboutComponent, title: PAGETITLE + ' | About', id: 2 }
 ];
 let RouterComponent = {
   data() {
@@ -136,10 +181,12 @@ let RouterComponent = {
       for(let route of routes) {
         if(route.regex.test(this.activatedRoute)) {
           document.title = route.title;
+          this.$parent.activatedRoute = route.id;
           return route.component;
         }
       }
       document.title = PAGETITLE + ' | 404';
+      this.$parent.activatedRoute = -1;
       return PageNotFoundComponent;
     }
   },
@@ -161,6 +208,7 @@ new Vue({
   el: '#app',
   data: {
     message: 'Hello, world!',
+    activatedRoute: -1
   },
   components: {
     'router': RouterComponent

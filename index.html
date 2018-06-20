@@ -2,6 +2,7 @@
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta name='description' content='A blog built for the modern reader! (alpha)'>
     <meta name='keywords' content='babap, blog, jessica lam, jonathan lam, interactive, modern, lam'>
     <meta name='author' content='Jonathan Lam <jonathanlamdev@gmail.com> (http://www.jonathanlam.tech)'>
@@ -10,20 +11,32 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
     <script src='/main.js' defer></script>
     <link rel='stylesheet' href='/mobile.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,400i,700'>
   </head>
   <body>
     <div id='app'>
-      <!-- header -->
-      <div id='header'>
-        <nav id='nav-bar'>
-          <a @click='$children[0].changeRoute("/posts")'>Posts</a>
-          <a @click='$children[0].changeRoute("/map")'>Map</a>
-          <a @click='$children[0].changeRoute("/about")'>About</a>
-        </nav>
-      </div>
+      <!-- header / navbar -->
+      <nav id='nav-bar'>
+        <a
+          class='nav-link noLink'
+          :class='{ active: activatedRoute == 0 }'
+          @click='$children[0].changeRoute("/posts")'>Posts</a>
+        <a
+          class='nav-link noLink'
+          :class='{ active: activatedRoute == 1 }'
+          @click='$children[0].changeRoute("/map")'>Map</a>
+        <a
+          class='nav-link noLink'
+          :class='{ active: activatedRoute == 2 }'
+          @click='$children[0].changeRoute("/about")'>About</a>
+      </nav>
 
       <!-- main content router -->
       <router></router>
     </div>
+    <address>
+      BaBaP. Copyright &copy; 2018 Jonathan Lam.<br>
+      Sitemaster: <a href='mailto:jonathanlamdev@gmail.com' target='_blank'>jonathanlamdev@gmail.com</a>
+    </address>
   </body>
 </html>
