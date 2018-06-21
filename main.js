@@ -39,6 +39,7 @@ let PostsComponent = {
       v-model='searchTerm'
       placeholder='Search'>
     <button id='search-button' type='button'>Search</button>
+    <div class='mobile-flex-break'></div>
     <span id='order-by-text'>Order by:</span>
     <select id='sort-select' v-model='postSort'>
       <option value='dateNewOld'>date (new-old)</option>

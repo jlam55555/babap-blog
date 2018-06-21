@@ -108,11 +108,17 @@ body {
   font-size: 16px;
   min-width: 20em;
 }
-div#container {
+#container {
   max-width: 60em;
   margin: 2em auto;
   padding: 0 1em;
   line-height: 1.5;
+}
+// line break horizontal flexbox on small screens
+@media only screen and (max-width: 600px) {
+  .mobile-flex-break {
+    flex-basis: 100%;
+  }
 }
 
 /* default basic tag styles (also all pages) */
@@ -143,6 +149,8 @@ address.hidden {
 button, input, select {
   font-size: inherit;
   font-family: inherit;
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 hr {
   margin: 2em;
@@ -199,20 +207,18 @@ hr {
   @extend %subtext;
 }
 #search-bar, #search-button, #sort-select {
-  @extend %card;  
+  @extend %card; 
+  margin: 1em 0 0 0;
 }
 #search-bar {
   flex: 1 0 0;
-  margin-right: 0;
   border-right: none;
-}
-#search-button {
-  margin-left: 0;
 }
 #search-sort-posts {
   display: flex;
   flex-direction: row;
   margin-top: -1em;
+  flex-wrap: wrap;
 }
 
 /* post styles (/posts/*, /about) */
@@ -232,7 +238,7 @@ div.float-right > figcaption {
 }
 #order-by-text {
   @extend %vcenter;
-  margin: 0 1em;
+  margin: 1em 1em 0 1em;
 }
 #post-body {
   padding: 1em;

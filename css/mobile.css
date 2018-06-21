@@ -128,13 +128,18 @@ body {
   min-width: 20em;
 }
 
-div#container {
+#container {
   max-width: 60em;
   margin: 2em auto;
   padding: 0 1em;
   line-height: 1.5;
 }
 
+@media only screen and (max-width: 600px) {
+  .mobile-flex-break {
+    flex-basis: 100%;
+  }
+}
 /* default basic tag styles (also all pages) */
 a {
   cursor: pointer;
@@ -165,6 +170,8 @@ address.hidden {
 button, input, select {
   font-size: inherit;
   font-family: inherit;
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 
 hr {
@@ -219,20 +226,20 @@ hr {
   margin: 0.25em 0;
 }
 
-#search-bar {
-  flex: 1 0 0;
-  margin-right: 0;
-  border-right: none;
+#search-bar, #search-button, #sort-select {
+  margin: 1em 0 0 0;
 }
 
-#search-button {
-  margin-left: 0;
+#search-bar {
+  flex: 1 0 0;
+  border-right: none;
 }
 
 #search-sort-posts {
   display: flex;
   flex-direction: row;
   margin-top: -1em;
+  flex-wrap: wrap;
 }
 
 /* post styles (/posts/*, /about) */
@@ -253,7 +260,7 @@ div.float-right > figcaption {
 }
 
 #order-by-text {
-  margin: 0 1em;
+  margin: 1em 1em 0 1em;
 }
 
 #post-body {
