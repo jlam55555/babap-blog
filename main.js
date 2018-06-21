@@ -194,6 +194,9 @@ let RouterComponent = {
       changeRoute: function(newRoute) {
         this.activatedRoute = newRoute;
         history.pushState(this.activatedRoute, '', newRoute);
+        // hide and un-hide <address> to avoid visual interference with other animations
+        this.$parent.isChanging = true;
+        setTimeout(() => this.$parent.isChanging = false, 100);
       }
     };
   },
@@ -229,7 +232,8 @@ new Vue({
   el: '#app',
   data: {
     message: 'Hello, world!',
-    activatedRoute: -1
+    activatedRoute: -1,
+    isChanging: false
   },
   components: {
     'router': RouterComponent

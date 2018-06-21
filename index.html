@@ -17,6 +17,7 @@
     <div id='app'>
       <!-- header / navbar -->
       <nav id='nav-bar'>
+        <!-- $children[0] refers to the router element -->
         <a
           class='nav-link noLink'
           :class='{ active: activatedRoute == 0 }'
@@ -33,10 +34,12 @@
 
       <!-- main content router -->
       <router></router>
+
+      <!-- footer -->
+      <address :class='{ hidden: isChanging }'>
+        BaBaP. Copyright &copy; 2018 Jonathan Lam.<br>
+        Sitemaster: <a href='mailto:jonathanlamdev@gmail.com' target='_blank'>jonathanlamdev@gmail.com</a>
+      </address>
     </div>
-    <address>
-      BaBaP. Copyright &copy; 2018 Jonathan Lam.<br>
-      Sitemaster: <a href='mailto:jonathanlamdev@gmail.com' target='_blank'>jonathanlamdev@gmail.com</a>
-    </address>
   </body>
 </html>

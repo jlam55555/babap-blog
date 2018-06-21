@@ -45,6 +45,11 @@ $long-transition: 0.3s;
 %fade-in {
   animation: fade-in-animation $long-transition forwards;
 }
+@keyframes fade-in-out-animation {
+  0% { opacity: 1; }
+  1% { opacity: 0; }
+  100% { opacity: 1; }
+}
 /**
   * css spinner courtesy of CSSLoad
   * author: Miguel Ambrosi
@@ -122,13 +127,18 @@ address {
   @extend %subtext;
   opacity: 0;
   animation-name: fade-in-animation;
-  animation-duration: $long-transition;
+  animation-duration: $transition;
   animation-delay: 0.5s;
   animation-fill-mode: forwards;
   font-style: normal;
   padding: 1em;
+  margin-bottom: 5em;
   text-align: center;
   clear: both;
+}
+// for when changing routes
+address.hidden {
+  animation-name: fade-in-out-animation;
 }
 button, input, select {
   font-size: inherit;
