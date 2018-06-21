@@ -1,67 +1,162 @@
 /* variables and classes */
-.post-item, #search-bar, #search-button, #sort-select {
+#search-bar, #search-button, #sort-select, .post-item {
   border: 1px solid lightgrey;
   padding: 1em;
-  margin: 1em;
+  margin: 1em 0;
   background-color: white;
-  transition: background-color 0.1s; }
+  transition: background-color 0.1s;
+}
 
-.post-item:hover, #search-bar:hover, #search-button:hover, #sort-select:hover, .post-item:focus, #search-bar:focus, #search-button:focus, #sort-select:focus {
-  background-color: whitesmoke; }
+#search-bar:hover, #search-button:hover, #sort-select:hover, .post-item:hover, #search-bar:focus, #search-button:focus, #sort-select:focus, .post-item:focus {
+  background-color: whitesmoke;
+}
 
-.post-item:focus, #search-bar:focus, #search-button:focus, #sort-select:focus {
-  outline: none; }
+#search-bar:focus, #search-button:focus, #sort-select:focus, .post-item:focus {
+  outline: none;
+}
 
-address, .post-path, div.float-right > figcaption {
+div.float-right > figcaption, .post-path, address {
   font-size: smaller;
-  color: grey; }
+  color: grey;
+}
 
-.nav-link, .post-id, #order-by-text {
+#order-by-text, .post-id, .nav-link {
   display: flex;
   flex-direction: column;
-  justify-content: center; }
+  justify-content: center;
+}
 
+/* animations and animation classes */
+@keyframes height-in-animation {
+  0% {
+    max-height: 0;
+  }
+  100% {
+    max-height: 20em;
+  }
+}
+.post-item {
+  overflow: hidden;
+  animation: height-in-animation 0.3s ease-in forwards;
+}
+
+@keyframes fade-in-animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+#post-container, .post-item {
+  animation: fade-in-animation 0.3s forwards;
+}
+
+/**
+  * css spinner courtesy of CSSLoad
+  * author: Miguel Ambrosi
+  * https://icons8.com/cssload/en/spinners
+  */
+.cssload-container {
+  position: relative;
+  margin-top: 5em;
+}
+
+.cssload-whirlpool,
+.cssload-whirlpool::before,
+.cssload-whirlpool::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #cccccc;
+  border-left-color: black;
+  border-radius: 974px;
+}
+
+.cssload-whirlpool {
+  margin: -24px 0 0 -24px;
+  height: 49px;
+  width: 49px;
+  animation: cssload-rotate 1150ms linear infinite;
+}
+
+.cssload-whirlpool::before {
+  content: "";
+  margin: -22px 0 0 -22px;
+  height: 43px;
+  width: 43px;
+  animation: cssload-rotate 1150ms linear infinite;
+}
+
+.cssload-whirlpool::after {
+  content: "";
+  margin: -28px 0 0 -28px;
+  height: 55px;
+  width: 55px;
+  animation: cssload-rotate 2300ms linear infinite;
+}
+
+@keyframes cssload-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 /* very generic body styles (all pages) */
 * {
-  display: border-box; }
+  display: border-box;
+}
 
 body, html {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
 body {
   font-family: roboto, sans-serif;
   font-size: 16px;
-  min-width: 20em; }
+  min-width: 20em;
+}
 
 div#container {
   max-width: 60em;
   margin: 2em auto;
-  line-height: 1.5; }
+  padding: 0 1em;
+  line-height: 1.5;
+}
 
 /* default basic tag styles (also all pages) */
 a {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 a:not(.noLink) {
   color: blue;
-  text-decoration: underline; }
+  text-decoration: underline;
+}
 
 address {
+  opacity: 0;
+  animation-name: fade-in-animation;
+  animation-duration: 0.3s;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
   font-style: normal;
   padding: 1em;
   text-align: center;
-  clear: both; }
+  clear: both;
+}
 
 button, input, select {
   font-size: inherit;
-  font-family: inherit; }
+  font-family: inherit;
+}
 
 hr {
   margin: 2em;
   background-color: darkslategrey;
   height: 1px;
-  border: none; }
+  border: none;
+}
 
 /* header styles (also all pages) */
 #nav-bar {
@@ -71,7 +166,8 @@ hr {
   display: flex;
   flex-direction: row;
   border-bottom: 3px solid lightslategrey;
-  padding: 0 calc(50% - 30em); }
+  padding: 0 calc(50% - 30em);
+}
 
 .nav-link {
   width: calc(100% / 3);
@@ -79,68 +175,90 @@ hr {
   text-align: center;
   border-bottom: 3px solid lightslategrey;
   margin-bottom: -3px;
-  transition: border-bottom-color 0.1s, background-color 0.1s; }
+  transition: border-bottom-color 0.1s, background-color 0.1s;
+}
 
 .nav-link.active {
-  background-color: whitesmoke; }
+  background-color: whitesmoke;
+}
 
 .nav-link:hover, .nav-link.active {
-  border-bottom-color: lightgrey; }
+  border-bottom-color: lightgrey;
+}
 
 /* post list styles (/posts) */
 .post-id {
   flex: 0 1 0;
   margin: 0 1em 0 0.5em;
   font-size: 2em;
-  color: lightgrey; }
+  color: lightgrey;
+}
 
 .post-item {
   display: flex;
-  flex-direction: row; }
+  flex-direction: row;
+}
 
 .post-title, .post-description {
-  margin: 0.25em 0; }
+  margin: 0.25em 0;
+}
+
+#search-bar {
+  flex: 1 0 0;
+  margin-right: 0;
+  border-right: none;
+}
+
+#search-button {
+  margin-left: 0;
+}
+
+#search-sort-posts {
+  display: flex;
+  flex-direction: row;
+  margin-top: -1em;
+}
 
 /* post styles (/posts/*, /about) */
 div.float-right {
   display: block;
   float: right;
-  margin: 1em 0 1em 2em; }
+  margin: 1em 0 1em 2em;
+}
 
 div.float-right > img {
   display: block;
-  max-width: 25em; }
+  max-width: 25em;
+}
 
 div.float-right > figcaption {
   max-width: 25em;
-  margin-top: 1em; }
+  margin-top: 1em;
+}
+
+#order-by-text {
+  margin: 0 1em;
+}
 
 #post-body {
-  padding: 1em; }
+  padding: 1em;
+}
 
 #post-data, #post-date, #post-description, #post-title {
-  line-height: 1.5; }
+  line-height: 1.5;
+}
 
 #post-data, #post-date {
   font-size: smaller;
-  color: grey; }
+  color: grey;
+}
 
 #post-description {
-  margin: 0; }
+  margin: 0;
+}
 
 #post-title {
-  margin: 0; }
-
-#search-bar {
-  flex: 1 0 0;
-  margin-right: 0;
-  border-right: none; }
-
-#search-button {
-  margin-left: 0; }
-
-#search-sort-posts {
-  display: flex;
-  flex-direction: row; }
+  margin: 0;
+}
 
 /*# sourceMappingURL=mobile.css.map */

@@ -19,6 +19,16 @@ function get(url, callback, json = true) {
 const PAGETITLE = 'BaBaP';
 
 /**
+  * helper static components
+  */
+Vue.component('loading', {
+  template: `<div class='cssload-container'>
+  <!-- CSS whirlpool spinner (attribution in CSS) -->
+  <div class='cssload-whirlpool'></div>
+</div>`
+})
+
+/**
   * component for posts page (list)
   */
 let PostsComponent = {
@@ -38,7 +48,7 @@ let PostsComponent = {
       <option value='alphaZA'>alphabetical (Z-A)</option>
     </select>
   </div>
-  <div v-if='posts.length == 0'>Loading&hellip;</div>
+  <loading v-if='posts.length == 0' />
   <div v-else>
     <a class='post-item noLink' v-for='post in postList' @click='$parent.changeRoute("/posts/" + post.path)'>
       <div class='post-id'>{{ post.id }}</div>
@@ -86,11 +96,12 @@ let PostsComponent = {
   */
 let PostComponent = {
   template: `<div id='container'>
-  <div v-if='postMetadata == null'>Loading&hellip;</div>
+  <loading v-if='postMetadata == null' />
   <div v-else-if='postMetadata.error'>
-    Error: {{ postMetadata.error  }}
+    <p>Error: {{ postMetadata.error  }}</p>
+    <p><a @click='$parent.changeRoute("/posts")'>Return home.</a></p>
   </div>
-  <div v-else>
+  <div id='post-container' v-else>
     <h3 id='post-title'>{{ postMetadata.title }}</h3>
     <p id='post-description'>{{ postMetadata.description }}</p>
     <div id='post-date'>Published {{ postMetadata.date }}</div>
@@ -99,9 +110,9 @@ let PostComponent = {
       Post views: {{ postMetadata.hits }}<br>
       Permalink: http://www.babap.co.nf/posts/{{ postMetadata.path }}
     </div>
-  </div>
-  <div>
-    <a @click='$parent.changeRoute("/posts")'>Return home.</a>
+    <p>
+      <a @click='$parent.changeRoute("/posts")'>Return home.</a>
+    </p>
   </div>
 </div>`,
   data() {

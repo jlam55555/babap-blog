@@ -5,6 +5,7 @@ $accent-color: darkslategrey;
 $light-accent-color: lightslategrey;
 $alttext-color: grey;
 $transition: 0.1s;
+$long-transition: 0.3s;
 %card {
   border: 1px solid $main-color;
   padding: 1em;
@@ -26,6 +27,67 @@ $transition: 0.1s;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+/* animations and animation classes */
+@keyframes height-in-animation {
+  0% { max-height: 0; }
+  100% { max-height: 20em; }
+}
+%height-in {
+  overflow: hidden;
+  animation: height-in-animation $long-transition ease-in forwards;
+}
+@keyframes fade-in-animation {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+%fade-in {
+  animation: fade-in-animation $long-transition forwards;
+}
+/**
+  * css spinner courtesy of CSSLoad
+  * author: Miguel Ambrosi
+  * https://icons8.com/cssload/en/spinners
+  */
+.cssload-container{
+  position: relative;
+  margin-top: 5em;
+}
+.cssload-whirlpool,
+.cssload-whirlpool::before,
+.cssload-whirlpool::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgb(204,204,204);
+  border-left-color: rgb(0,0,0);
+  border-radius: 974px;
+}
+.cssload-whirlpool {
+  margin: -24px 0 0 -24px;
+  height: 49px;
+  width: 49px;
+  animation: cssload-rotate 1150ms linear infinite;
+}
+.cssload-whirlpool::before {
+  content: "";
+  margin: -22px 0 0 -22px;
+  height: 43px;
+  width: 43px;
+  animation: cssload-rotate 1150ms linear infinite;
+}
+.cssload-whirlpool::after {
+  content: "";
+  margin: -28px 0 0 -28px;
+  height: 55px;
+  width: 55px;
+  animation: cssload-rotate 2300ms linear infinite;
+}
+@keyframes cssload-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* very generic body styles (all pages) */
@@ -58,6 +120,11 @@ a:not(.noLink) {
 }
 address {
   @extend %subtext;
+  opacity: 0;
+  animation-name: fade-in-animation;
+  animation-duration: $long-transition;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
   font-style: normal;
   padding: 1em;
   text-align: center;
@@ -110,6 +177,8 @@ hr {
 }
 .post-item {
   @extend %card;
+  @extend %height-in;
+  @extend %fade-in;
   display: flex;
   flex-direction: row;
 }
@@ -118,6 +187,22 @@ hr {
 }
 .post-path {
   @extend %subtext;
+}
+#search-bar, #search-button, #sort-select {
+  @extend %card;  
+}
+#search-bar {
+  flex: 1 0 0;
+  margin-right: 0;
+  border-right: none;
+}
+#search-button {
+  margin-left: 0;
+}
+#search-sort-posts {
+  display: flex;
+  flex-direction: row;
+  margin-top: -1em;
 }
 
 /* post styles (/posts/*, /about) */
@@ -137,9 +222,13 @@ div.float-right > figcaption {
 }
 #order-by-text {
   @extend %vcenter;
+  margin: 0 1em;
 }
 #post-body {
   padding: 1em;
+}
+#post-container {
+  @extend %fade-in;
 }
 #post-data, #post-date, #post-description, #post-title {
   line-height: 1.5;
@@ -153,19 +242,4 @@ div.float-right > figcaption {
 }
 #post-title {
   margin: 0;
-}
-#search-bar, #search-button, #sort-select {
-  @extend %card;  
-}
-#search-bar {
-  flex: 1 0 0;
-  margin-right: 0;
-  border-right: none;
-}
-#search-button {
-  margin-left: 0;
-}
-#search-sort-posts {
-  display: flex;
-  flex-direction: row;
 }
