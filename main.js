@@ -23,23 +23,23 @@ const PAGETITLE = 'BaBaP';
   */
 let PostsComponent = {
   template: `<div id='container'>
+  <div id='search-sort-posts'>
+    <input
+      id='search-bar'
+      v-model='searchTerm'
+      placeholder='Search'>
+    <button id='search-button' type='button'>Search</button>
+    <span id='order-by-text'>Order by:</span>
+    <select id='sort-select' v-model='postSort'>
+      <option value='dateNewOld'>date (new-old)</option>
+      <option value='dateOldNew'>date (old-new)</option>
+      <option value='viewsMostLeast'>views (most-least)</option>
+      <option value='alphaAZ'>alphabetical (A-Z)</option>
+      <option value='alphaZA'>alphabetical (Z-A)</option>
+    </select>
+  </div>
   <div v-if='posts.length == 0'>Loading&hellip;</div>
   <div v-else>
-    <div id='search-sort-posts'>
-      <input
-        id='search-bar'
-        v-model='searchTerm'
-        placeholder='Search'>
-      <button id='search-button' type='button'>Search</button>
-      <span id='order-by-text'>Order by:</span>
-      <select id='sort-select' v-model='postSort'>
-        <option value='dateNewOld'>date (new-old)</option>
-        <option value='dateOldNew'>date (old-new)</option>
-        <option value='viewsMostLeast'>views (most-least)</option>
-        <option value='alphaAZ'>alphabetical (A-Z)</option>
-        <option value='alphaZA'>alphabetical (Z-A)</option>
-      </select>
-    </div>
     <a class='post-item noLink' v-for='post in postList' @click='$parent.changeRoute("/posts/" + post.path)'>
       <div class='post-id'>{{ post.id }}</div>
       <div class='post-info'>
