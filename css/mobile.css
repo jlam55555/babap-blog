@@ -1,0 +1,146 @@
+/* variables and classes */
+.post-item, #search-bar, #search-button, #sort-select {
+  border: 1px solid lightgrey;
+  padding: 1em;
+  margin: 1em;
+  background-color: white;
+  transition: background-color 0.1s; }
+
+.post-item:hover, #search-bar:hover, #search-button:hover, #sort-select:hover, .post-item:focus, #search-bar:focus, #search-button:focus, #sort-select:focus {
+  background-color: whitesmoke; }
+
+.post-item:focus, #search-bar:focus, #search-button:focus, #sort-select:focus {
+  outline: none; }
+
+address, .post-path, div.float-right > figcaption {
+  font-size: smaller;
+  color: grey; }
+
+.nav-link, .post-id, #order-by-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+
+/* very generic body styles (all pages) */
+* {
+  display: border-box; }
+
+body, html {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font-family: roboto, sans-serif;
+  font-size: 16px;
+  min-width: 20em; }
+
+div#container {
+  max-width: 60em;
+  margin: 2em auto;
+  line-height: 1.5; }
+
+/* default basic tag styles (also all pages) */
+a {
+  cursor: pointer; }
+
+a:not(.noLink) {
+  color: blue;
+  text-decoration: underline; }
+
+address {
+  font-style: normal;
+  padding: 1em;
+  text-align: center;
+  clear: both; }
+
+button, input, select {
+  font-size: inherit;
+  font-family: inherit; }
+
+hr {
+  margin: 2em;
+  background-color: darkslategrey;
+  height: 1px;
+  border: none; }
+
+/* header styles (also all pages) */
+#nav-bar {
+  display: fixed;
+  top: 0;
+  height: 3em;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 3px solid lightslategrey;
+  padding: 0 calc(50% - 30em); }
+
+.nav-link {
+  width: calc(100% / 3);
+  max-width: 20em;
+  text-align: center;
+  border-bottom: 3px solid lightslategrey;
+  margin-bottom: -3px;
+  transition: border-bottom-color 0.1s, background-color 0.1s; }
+
+.nav-link.active {
+  background-color: whitesmoke; }
+
+.nav-link:hover, .nav-link.active {
+  border-bottom-color: lightgrey; }
+
+/* post list styles (/posts) */
+.post-id {
+  flex: 0 1 0;
+  margin: 0 1em 0 0.5em;
+  font-size: 2em;
+  color: lightgrey; }
+
+.post-item {
+  display: flex;
+  flex-direction: row; }
+
+.post-title, .post-description {
+  margin: 0.25em 0; }
+
+/* post styles (/posts/*, /about) */
+div.float-right {
+  display: block;
+  float: right;
+  margin: 1em 0 1em 2em; }
+
+div.float-right > img {
+  display: block;
+  max-width: 25em; }
+
+div.float-right > figcaption {
+  max-width: 25em;
+  margin-top: 1em; }
+
+#post-body {
+  padding: 1em; }
+
+#post-data, #post-date, #post-description, #post-title {
+  line-height: 1.5; }
+
+#post-data, #post-date {
+  font-size: smaller;
+  color: grey; }
+
+#post-description {
+  margin: 0; }
+
+#post-title {
+  margin: 0; }
+
+#search-bar {
+  flex: 1 0 0;
+  margin-right: 0;
+  border-right: none; }
+
+#search-button {
+  margin-left: 0; }
+
+#search-sort-posts {
+  display: flex;
+  flex-direction: row; }
+
+/*# sourceMappingURL=mobile.css.map */

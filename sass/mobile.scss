@@ -1,3 +1,33 @@
+/* variables and classes */
+$subtle-color: whitesmoke;
+$main-color: lightgrey;
+$accent-color: darkslategrey;
+$light-accent-color: lightslategrey;
+$alttext-color: grey;
+$transition: 0.1s;
+%card {
+  border: 1px solid $main-color;
+  padding: 1em;
+  margin: 1em;
+  background-color: white;
+  transition: background-color $transition;
+}
+%card:hover, %card:focus {
+  background-color: $subtle-color;
+}
+%card:focus {
+  outline: none;
+}
+%subtext {
+  font-size: smaller;
+  color: $alttext-color;
+}
+%vcenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* very generic body styles (all pages) */
 * {
   display: border-box;
@@ -26,16 +56,19 @@ a:not(.noLink) {
   text-decoration: underline;
 }
 address {
+  @extend %subtext;
   font-style: normal;
-  font-size: smaller;
-  color: grey;
   padding: 1em;
   text-align: center;
   clear: both;
 }
+button, input, select {
+  font-size: inherit;
+  font-family: inherit;
+}
 hr {
   margin: 2em;
-  background-color: darkslategrey;
+  background-color: $accent-color;
   height: 1px;
   border: none;
 }
@@ -47,51 +80,43 @@ hr {
   height: 3em;
   display: flex;
   flex-direction: row;
-  border-bottom: 3px solid lightslategrey;
+  border-bottom: 3px solid $light-accent-color;
   padding: 0 calc(50% - 30em);
 }
 .nav-link {
-  display: inline-block;
+  @extend %vcenter;
   width: calc(100% / 3);
   max-width: 20em;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-bottom: 3px solid lightslategrey;
+  border-bottom: 3px solid $light-accent-color;
   margin-bottom: -3px;
-  transition: border-bottom-color 0.1s, background-color 0.1s;
+  transition: border-bottom-color $transition, background-color $transition;
 }
 .nav-link.active {
-  background-color: whitesmoke;
+  background-color: $subtle-color;
 }
 .nav-link:hover, .nav-link.active {
-  border-bottom-color: lightgrey;
+  border-bottom-color: $main-color;
 }
 
 /* post list styles (/posts) */
 .post-id {
+  @extend %vcenter;
   flex: 0 1 0;
   margin: 0 1em 0 0.5em;
-  display: flex;
   font-size: 2em;
-  flex-direction: column;
-  justify-content: center;
-  color: lightgrey;
+  color: $main-color;
 }
 .post-item {
+  @extend %card;
   display: flex;
   flex-direction: row;
-  border: 1px solid lightgrey;
-  margin: 1em;
-  padding: 1em;
 }
 .post-title, .post-description {
   margin: 0.25em 0;
 }
 .post-path {
-  font-size: smaller;
-  color: grey;
+  @extend %subtext;
 }
 
 /* post styles (/posts/*, /about) */
@@ -105,10 +130,12 @@ div.float-right > img {
   max-width: 25em;
 }
 div.float-right > figcaption {
+  @extend %subtext;
   max-width: 25em;
   margin-top: 1em;
-  font-size: smaller;
-  color: grey;
+}
+#order-by-text {
+  @extend %vcenter;
 }
 #post-body {
   padding: 1em;
@@ -125,4 +152,19 @@ div.float-right > figcaption {
 }
 #post-title {
   margin: 0;
+}
+#search-bar, #search-button, #sort-select {
+  @extend %card;  
+}
+#search-bar {
+  flex: 1 0 0;
+  margin-right: 0;
+  border-right: none;
+}
+#search-button {
+  margin-left: 0;
+}
+#search-sort-posts {
+  display: flex;
+  flex-direction: row;
 }

@@ -27,9 +27,12 @@ let PostsComponent = {
   <div v-else>
     <div id='search-sort-posts'>
       <input
+        id='search-bar'
+        v-model='searchTerm'
         placeholder='Search'>
-      <span>Order by:</span>
-      <select v-model='postSort'>
+      <button id='search-button' type='button'>Search</button>
+      <span id='order-by-text'>Order by:</span>
+      <select id='sort-select' v-model='postSort'>
         <option value='dateNewOld'>date (new-old)</option>
         <option value='dateOldNew'>date (old-new)</option>
         <option value='viewsMostLeast'>views (most-least)</option>
@@ -50,7 +53,8 @@ let PostsComponent = {
   data() {
     return {
       posts: [],
-      postSort: 'dateNewOld'
+      postSort: 'dateNewOld',
+      searchTerm: ''
     };
   },
   computed: {
@@ -60,6 +64,12 @@ let PostsComponent = {
           return this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
         case 'dateOldNew':
           return this.posts.sort((a, b) => new Date(a.date) - new Date(b.date));
+        case 'viewsMostLeast':
+          return this.posts.sort((a, b) => b.hits - a.hits);
+        case 'alphaAZ':
+          return this.posts.sort((a, b) => a.title.localeCompare(b.title));
+        case 'alphaZA':
+          return this.posts.sort((a, b) => b.title.localeCompare(a.title));
       }
     }
   },
