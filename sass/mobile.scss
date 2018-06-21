@@ -8,7 +8,7 @@ $transition: 0.1s;
 %card {
   border: 1px solid $main-color;
   padding: 1em;
-  margin: 1em;
+  margin: 1em 0;
   background-color: white;
   transition: background-color $transition;
 }
@@ -44,6 +44,7 @@ body {
 div#container {
   max-width: 60em;
   margin: 2em auto;
+  padding: 0 1em;
   line-height: 1.5;
 }
 
