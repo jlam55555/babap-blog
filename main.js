@@ -60,10 +60,11 @@ let PostsComponent = {
   <div v-else>
     <a class='post-item noLink' v-for='post in postList' @click='goto("/posts/" + post.path)'>
       <div class='post-id'>{{ post.id }}</div>
+      <div class='post-image' :style='{ backgroundImage: "url(/_posts/img/" + post.image + ")" }'></div>
       <div class='post-info'>
         <h3 class='post-title'>{{ post.title }}</h3>
         <p class='post-description'>{{ post.description }}</p>
-        <div class='post-path'>/posts/{{ post.path }}</div>
+        <div class='post-path'>{{ post.author }}<br>/posts/{{ post.path }}</div>
       </div>
     </a>
   </div>
@@ -147,7 +148,8 @@ let PostComponent = {
   <div id='post-container' v-else>
     <h3 id='post-title'>{{ postMetadata.title }}</h3>
     <p id='post-description'>{{ postMetadata.description }}</p>
-    <div id='post-date'>Published {{ postMetadata.date }}</div>
+    <div id='post-date'>By {{ postMetadata.author }} | Published {{ postMetadata.date }}</div>
+    <div id='post-image' :style='{ backgroundImage: "url(/_posts/img/" + postMetadata.image + ")" }'></div>
     <div id='post-body' v-html='postBody'></div>
     <div id='post-data'>
       Post views: {{ postMetadata.hits }}<br>

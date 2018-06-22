@@ -109,9 +109,12 @@ body {
   padding: 0 1em;
   line-height: 1.5; }
 
-@media only screen and (max-width: 600px) {
+.mobile-flex-break {
+  flex-basis: 100%; }
+
+@media only screen and (min-width: 600px) {
   .mobile-flex-break {
-    flex-basis: 100%; } }
+    flex-basis: 0; } }
 /* default basic tag styles (also all pages) */
 a {
   cursor: pointer; }
@@ -173,15 +176,40 @@ hr {
 
 /* post list styles (/posts) */
 .post-id {
-  flex: 0 1 0;
-  margin: 0 1em 0 0.5em;
+  flex: 0 0 4em;
   font-size: 2em;
-  color: lightgrey; }
+  margin-bottom: 1em;
+  text-align: center;
+  color: lightgrey;
+  background-color: rgba(0, 0, 0, 0.25); }
+
+.post-image {
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 10em;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0; }
 
 .post-item {
   display: flex;
-  flex-direction: row; }
+  flex-direction: column;
+  position: relative; }
 
+@media only screen and (min-width: 600px) {
+  .post-id {
+    margin-right: 1.5em;
+    margin-bottom: 0; }
+
+  .post-image {
+    width: 10em;
+    height: 100%; }
+
+  .post-item {
+    flex-direction: row;
+    height: 10em; } }
 .post-title, .post-description {
   margin: 0.25em 0; }
 
@@ -228,6 +256,16 @@ div.float-right > figcaption {
 #post-description {
   margin: 0; }
 
+#post-image {
+  width: 100%;
+  height: 20em;
+  background-size: cover;
+  background-position: center;
+  margin: 1em 0; }
+
+@media only screen and (min-width: 600px) {
+  #post-image {
+    height: 30em; } }
 #post-title {
   margin: 0; }
 
