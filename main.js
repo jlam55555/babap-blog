@@ -21,12 +21,31 @@ const PAGETITLE = 'BaBaP';
 /**
   * helper static components
   */
+// loading animation
 Vue.component('loading', {
   template: `<div class='cssload-container'>
   <!-- CSS whirlpool spinner (attribution in CSS) -->
   <div class='cssload-whirlpool'></div>
 </div>`
-})
+});
+// lazy-loaded image
+Vue.component('lazy-image', {
+  template: `<img v-if='asImage' class='lazy-image' :src='srcString'>
+  <div v-else class='lazy-image' :style='styleObject'></div>`,
+  props: {
+    src: String,
+    isAsset: Boolean,
+    asImage: Boolean
+  },
+  computed: {
+    srcString() {
+      return `/${this.isAsset ? 'assets' : '_posts/img'}/${this.src}`;
+    },
+    styleObject() {
+      return { backgroundImage: `url(${this.srcString})` };
+    }
+  }
+});
 
 /**
   * component for posts page (list)
@@ -60,7 +79,7 @@ let PostsComponent = {
   <div v-else>
     <a class='post-item noLink' v-for='post in postList' @click='goto("/posts/" + post.path)'>
       <div class='post-id'>{{ post.id }}</div>
-      <div class='post-image' :style='{ backgroundImage: "url(/_posts/img/" + post.image + ")" }'></div>
+      <lazy-image class='post-image' :src='post.image'></lazy-image>
       <div class='post-info'>
         <h3 class='post-title'>{{ post.title }}</h3>
         <p class='post-description'>{{ post.description }}</p>
@@ -149,7 +168,7 @@ let PostComponent = {
     <h3 id='post-title'>{{ postMetadata.title }}</h3>
     <p id='post-description'>{{ postMetadata.description }}</p>
     <div id='post-date'>By {{ postMetadata.author }} | Published {{ postMetadata.date }}</div>
-    <div id='post-image' :style='{ backgroundImage: "url(/_posts/img/" + postMetadata.image + ")" }'></div>
+    <lazy-image id='post-image' :src='postMetadata.image'></lazy-image>
     <div id='post-body' v-html='postBody'></div>
     <div id='post-data'>
       Post views: {{ postMetadata.hits }}<br>
@@ -199,7 +218,7 @@ let MapComponent = {
 let AboutComponent = {
   template: `<div id='container'>
   <div class='float-right'>
-    <img src='/assets/portrait.jpg'>
+    <lazy-image src='portrait.jpg' :is-asset='true' :as-image='true'></lazy-image>
     <figcaption>Here's an image. Your portrait could go here.</figcaption>
   </div>
   <h3>Meet the author!</h3>

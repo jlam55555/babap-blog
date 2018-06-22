@@ -176,12 +176,15 @@ hr {
 
 /* post list styles (/posts) */
 .post-id {
-  flex: 0 0 4em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2em;
+  width: 2em;
   font-size: 2em;
-  margin-bottom: 1em;
   text-align: center;
   color: lightgrey;
-  background-color: rgba(0, 0, 0, 0.25); }
+  background-color: grey; }
 
 .post-image {
   background-position: center;
@@ -193,19 +196,22 @@ hr {
   left: 0;
   top: 0; }
 
+.post-info {
+  margin-top: 11em; }
+
 .post-item {
   display: flex;
   flex-direction: column;
   position: relative; }
 
 @media only screen and (min-width: 600px) {
-  .post-id {
-    margin-right: 1.5em;
-    margin-bottom: 0; }
-
   .post-image {
     width: 10em;
     height: 100%; }
+
+  .post-info {
+    margin-top: 0;
+    margin-left: 11em; }
 
   .post-item {
     flex-direction: row;
