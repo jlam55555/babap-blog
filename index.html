@@ -20,20 +20,23 @@
         <!-- $children[0] refers to the router element -->
         <a
           class='nav-link noLink'
-          :class='{ active: activatedRoute == 0 }'
-          @click='$children[0].changeRoute("/posts")'>Posts</a>
+          :class='{ active: activatedRouteId == 0 }'
+          @click='goto("/posts")'>Posts</a>
         <a
           class='nav-link noLink'
-          :class='{ active: activatedRoute == 1 }'
-          @click='$children[0].changeRoute("/map")'>Map</a>
+          :class='{ active: activatedRouteId == 1 }'
+          @click='goto("/map")'>Map</a>
         <a
           class='nav-link noLink'
-          :class='{ active: activatedRoute == 2 }'
-          @click='$children[0].changeRoute("/about")'>About</a>
+          :class='{ active: activatedRouteId == 2 }'
+          @click='goto("/about")'>About</a>
       </nav>
 
       <!-- main content router -->
-      <router></router>
+      <component
+        :is='ViewComponent'
+        :params='params'
+        :goto='goto'></component>
 
       <!-- footer -->
       <address :class='{ hidden: isChanging }'>

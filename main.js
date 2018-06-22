@@ -52,7 +52,7 @@ let PostsComponent = {
   </div>
   <loading v-if='posts.length == 0' />
   <div v-else>
-    <a class='post-item noLink' v-for='post in postList' @click='$parent.changeRoute("/posts/" + post.path)'>
+    <a class='post-item noLink' v-for='post in postList' @click='goto("/posts/" + post.path)'>
       <div class='post-id'>{{ post.id }}</div>
       <div class='post-info'>
         <h3 class='post-title'>{{ post.title }}</h3>
@@ -64,6 +64,9 @@ let PostsComponent = {
   <!-- force watch computed property -->
   {{ getParams }}
 </div>`,
+  props: {
+    goto: Function,
+  },
   data() {
     return {
       posts: [],
@@ -96,17 +99,20 @@ let PostsComponent = {
     updateUrl() {
       let searchParam = this.searchTerm.length ? 'q=' + this.searchTerm : '';
       let sortParam = this.postSort == 'datenewold' ? '' : 'sort=' + this.postSort;
-      this.$parent.changeRoute(`/posts${ searchParam || sortParam ? '?' : '' }${ searchParam && sortParam ? [searchParam, sortParam].join('&') : [searchParam, sortParam].join('') }`);
+      this.goto(`/posts${ searchParam || sortParam ? '?' : '' }${ searchParam && sortParam ? [searchParam, sortParam].join('&') : [searchParam, sortParam].join('') }`);
     }
   },
   props: {
-    params: URLSearchParams
+    params: URLSearchParams,
+    goto: Function
   },
   created() {
     // get post data
     get('/scripts/getPostList.php', postData => {
       this.posts = postData;
     });
+    console.log(this.params);
+    console.log(this.goto);
   }
 };
 
@@ -118,7 +124,7 @@ let PostComponent = {
   <loading v-if='postMetadata == null' />
   <div v-else-if='postMetadata.error'>
     <p>Error: {{ postMetadata.error  }}</p>
-    <p><a @click='$parent.changeRoute("/posts")'>Return home.</a></p>
+    <p><a @click='goto("/posts")'>Return home.</a></p>
   </div>
   <div id='post-container' v-else>
     <h3 id='post-title'>{{ postMetadata.title }}</h3>
@@ -130,7 +136,7 @@ let PostComponent = {
       Permalink: http://www.babap.co.nf/posts/{{ postMetadata.path }}
     </div>
     <p>
-      <a @click='$parent.changeRoute("/posts")'>Return home.</a>
+      <a @click='goto("/")'>Return home.</a>
     </p>
   </div>
 </div>`,
@@ -141,6 +147,9 @@ let PostComponent = {
       postBody: null,
       converter: new showdown.Converter()
     };
+  },
+  props: {
+    goto: Function
   },
   created() {
     get('/scripts/getPostData.php?postName=' + this.postName, postData => {
@@ -158,7 +167,10 @@ let MapComponent = {
   template: `<div id='container'>
   <h3>Map</h3>
   <p>Sorry, BaBaP's interactive map has not been implemented yet.</p>
-</div>`
+</div>`,
+  props: {
+    goto: Function
+  }
 };
 
 /**
@@ -177,7 +189,10 @@ let AboutComponent = {
   <p>You're probably wondering, What is BaBaP? What does it stand for?</p>
   <p>And the answer is, Not much. Something along the lines of Bits and Bytes and Pieces. Or Bits and Bites and Pieces. Or Bits and Bites and Peaces. Think peace signs, computers (bits and bytes), or cakes (bites and pieces). But it can mean anything that fits the acronym. In other words, it's free-form, in a modern way.</p>
   <p>The main vision for BaBaP was to create an interactive experience. You can navigate this blog just as you navigate this world: walk around, enter homes or museums, talk to others. Perhaps you even take portals to your favorite exhibit, or to a random part of the world. Unfortunately, this part of BaBaP does not exist yet, in this very early stage.</p>
-</div>`
+</div>`,
+  props: {
+    goto: Function
+  } 
 };
 
 /**
@@ -187,12 +202,15 @@ let PageNotFoundComponent = {
   template: `<div id='container'>
   <h3>Sorry. This page has been destroyed (or never existed).</h3>
   <p>If you feel that this is a mistake, please contact the sitemaster (email address below).</p>
-  <a @click='$parent.changeRoute("/posts")'>Return to the homepage?</a>
-</div>`
-}
+  <a @click='goto("/posts")'>Return to the homepage?</a>
+</div>`,
+  props: {
+    goto: Function,
+  }
+};
 
 /**
-  * simple router
+  * simple router (now included in base model)
   * <p>
   * features:
   * - regex to match components
@@ -206,19 +224,18 @@ let routes = [
   { regex: /^\/map\/?$/, component: MapComponent, title: PAGETITLE + ' | Map', id: 1 },
   { regex: /^\/about\/?$/, component: AboutComponent, title: PAGETITLE + ' | About', id: 2 }
 ];
-let RouterComponent = {
-  data() {
-    return {
-      activatedRoute: window.location.pathname.toLowerCase(),
-      searchParams: document.location.search,
-      changeRoute: function(newRoute) {
-        history.pushState({ url: this.activatedRoute }, '', newRoute);
-        this.activatedRoute = newRoute;
-        // hide and un-hide <address> to avoid visual interference with other animations
-        this.$parent.isChanging = true;
-        setTimeout(() => this.$parent.isChanging = false, 100);
-      }
-    };
+
+/**
+  * set up base Vue app
+  * updated to include routing
+  */
+new Vue({
+  el: '#app',
+  data: {
+    isChanging: false,
+    activatedRoute: window.location.pathname.toLowerCase(),
+    activatedRouteId: -1,
+    searchParams: document.location.search,
   },
   computed: {
     path() {
@@ -231,21 +248,23 @@ let RouterComponent = {
       for(let route of routes) {
         if(route.regex.test(this.path)) {
           document.title = route.title;
-          this.$parent.activatedRoute = route.id;
+          this.activatedRouteId = route.id;
           return route.component;
         }
       }
       document.title = PAGETITLE + ' | 404';
-      this.$parent.activatedRoute = -1;
+      this.activatedRouteId = -1;
       return PageNotFoundComponent;
     }
   },
-  render(createElement) {
-    return createElement(this.ViewComponent, {
-      props: {
-        params: this.params
-      }
-    });
+  methods: {
+    goto: function(newRoute) {
+      history.pushState({ url: this.activatedRoute }, '', newRoute);
+      this.activatedRoute = newRoute;
+      // hide and un-hide <address> to avoid visual interference with other animations
+      this.isChanging = true;
+      setTimeout(() => this.isChanging = false, 100);
+    }
   },
   created() {
     // allow the navigation buttons to work
@@ -253,20 +272,8 @@ let RouterComponent = {
       this.activatedRoute = window.location.pathname.toLowerCase();
       this.searchParams = document.location.search;
     };
-  }
-}
-
-/**
-  * set up base Vue app
-  */
-new Vue({
-  el: '#app',
-  data: {
-    message: 'Hello, world!',
-    activatedRoute: -1,
-    isChanging: false
-  },
-  components: {
-    'router': RouterComponent
+    this.$on('change-route', newRoute => {
+      console.log('test');
+    });
   }
 });

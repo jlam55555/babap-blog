@@ -90,7 +90,7 @@ address, .post-path, div.float-right > figcaption {
     transform: rotate(360deg); } }
 /* very generic body styles (all pages) */
 * {
-  display: border-box; }
+  box-sizing: border-box; }
 
 body, html {
   margin: 0;
