@@ -133,7 +133,7 @@ address {
   @extend %subtext;
   opacity: 0;
   animation-name: fade-in-animation;
-  animation-duration: $transition;
+  animation-duration: $long-transition;
   animation-delay: 0.5s;
   animation-fill-mode: forwards;
   font-style: normal;

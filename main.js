@@ -37,16 +37,17 @@ let PostsComponent = {
     <input
       id='search-bar'
       v-model='searchTerm'
+      @change='updateUrl'
       placeholder='Search'>
     <button id='search-button' type='button'>Search</button>
     <div class='mobile-flex-break'></div>
     <span id='order-by-text'>Order by:</span>
-    <select id='sort-select' v-model='postSort'>
-      <option value='dateNewOld'>date (new-old)</option>
-      <option value='dateOldNew'>date (old-new)</option>
-      <option value='viewsMostLeast'>views (most-least)</option>
-      <option value='alphaAZ'>alphabetical (A-Z)</option>
-      <option value='alphaZA'>alphabetical (Z-A)</option>
+    <select id='sort-select' v-model='postSort' @change='updateUrl'>
+      <option value='datenewold'>date (new-old)</option>
+      <option value='dateoldnew'>date (old-new)</option>
+      <option value='viewsmostleast'>views (most-least)</option>
+      <option value='alphaaz'>alphabetical (A-Z)</option>
+      <option value='alphaza'>alphabetical (Z-A)</option>
     </select>
   </div>
   <loading v-if='posts.length == 0' />
@@ -60,29 +61,46 @@ let PostsComponent = {
       </div>
     </a>
   </div>
+  <!-- force watch computed property -->
+  {{ getParams }}
 </div>`,
   data() {
     return {
       posts: [],
-      postSort: 'dateNewOld',
-      searchTerm: ''
+      postSort: 'datenewold',
+      searchTerm: '',
     };
   },
   computed: {
     postList() {
       switch(this.postSort) {
-        case 'dateNewOld':
-          return this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-        case 'dateOldNew':
+        case 'dateoldnew':
           return this.posts.sort((a, b) => new Date(a.date) - new Date(b.date));
-        case 'viewsMostLeast':
+        case 'viewsmostleast':
           return this.posts.sort((a, b) => b.hits - a.hits);
-        case 'alphaAZ':
+        case 'alphaaz':
           return this.posts.sort((a, b) => a.title.localeCompare(b.title));
-        case 'alphaZA':
+        case 'alphaza':
           return this.posts.sort((a, b) => b.title.localeCompare(a.title));
+        case 'datenewold':
+        default:
+          return this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
       }
+    },
+    getParams() {
+      this.searchTerm = this.params.get('q') || '';
+      this.postSort = this.params.get('sort') || 'datenewold';
     }
+  },
+  methods: {
+    updateUrl() {
+      let searchParam = this.searchTerm.length ? 'q=' + this.searchTerm : '';
+      let sortParam = this.postSort == 'datenewold' ? '' : 'sort=' + this.postSort;
+      this.$parent.changeRoute(`/posts${ searchParam || sortParam ? '?' : '' }${ searchParam && sortParam ? [searchParam, sortParam].join('&') : [searchParam, sortParam].join('') }`);
+    }
+  },
+  props: {
+    params: URLSearchParams
   },
   created() {
     // get post data
@@ -192,9 +210,10 @@ let RouterComponent = {
   data() {
     return {
       activatedRoute: window.location.pathname.toLowerCase(),
+      searchParams: document.location.search,
       changeRoute: function(newRoute) {
+        history.pushState({ url: this.activatedRoute }, '', newRoute);
         this.activatedRoute = newRoute;
-        history.pushState(this.activatedRoute, '', newRoute);
         // hide and un-hide <address> to avoid visual interference with other animations
         this.$parent.isChanging = true;
         setTimeout(() => this.$parent.isChanging = false, 100);
@@ -202,9 +221,15 @@ let RouterComponent = {
     };
   },
   computed: {
+    path() {
+      return this.activatedRoute.split('?')[0];
+    },
+    params() {
+      return new URLSearchParams(this.searchParams);
+    },
     ViewComponent() {
       for(let route of routes) {
-        if(route.regex.test(this.activatedRoute)) {
+        if(route.regex.test(this.path)) {
           document.title = route.title;
           this.$parent.activatedRoute = route.id;
           return route.component;
@@ -216,12 +241,17 @@ let RouterComponent = {
     }
   },
   render(createElement) {
-    return createElement(this.ViewComponent);
+    return createElement(this.ViewComponent, {
+      props: {
+        params: this.params
+      }
+    });
   },
   created() {
-    // allow the back button to work
+    // allow the navigation buttons to work
     window.onpopstate = popStateData => {
-      this.activatedRoute = popStateData.state;
+      this.activatedRoute = window.location.pathname.toLowerCase();
+      this.searchParams = document.location.search;
     };
   }
 }
