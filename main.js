@@ -23,27 +23,42 @@ const PAGETITLE = 'BaBaP';
   */
 // loading animation
 Vue.component('loading', {
-  template: `<div class='cssload-container'>
+  template: `<div class='cssload-container' :class='{ "lazy-image": isLazyImage }'>
   <!-- CSS whirlpool spinner (attribution in CSS) -->
   <div class='cssload-whirlpool'></div>
-</div>`
+</div>`,
+  props: {
+    isLazyImage: Boolean
+  }
 });
 // lazy-loaded image
 Vue.component('lazy-image', {
-  template: `<img v-if='asImage' class='lazy-image' :src='srcString'>
-  <div v-else class='lazy-image' :style='styleObject'></div>`,
+  template: `<loading :is-lazy-image='true' v-if='isLoading' />
+<img v-else-if='asImage' class='lazy-image' :src='srcString'>
+<div v-else class='lazy-image' :style='styleObject' />`,
   props: {
     src: String,
     isAsset: Boolean,
     asImage: Boolean
   },
-  computed: {
-    srcString() {
-      return `/${this.isAsset ? 'assets' : '_posts/img'}/${this.src}`;
-    },
-    styleObject() {
-      return { backgroundImage: `url(${this.srcString})` };
-    }
+  data() {
+    return {
+      isLoading: true,
+      srcString: '',
+      styleObject: {}
+    };
+  },
+  created() {
+    // load image first
+    let imageUrl = `/${this.isAsset ? 'assets' : '_posts/img'}/${this.src}`;
+    let image = new Image();
+    image.onload = () => {
+      console.log('loaded');
+      this.isLoading = false;
+      this.srcString = imageUrl;
+      this.styleObject = { backgroundImage: `url(${this.srcString})` };
+    };
+    image.src = imageUrl;
   }
 });
 
@@ -307,7 +322,7 @@ new Vue({
   },
   created() {
     if(history.state == null) {
-      history.replaceState({ url: '/' }, '', '/');
+      history.replaceState({ url: window.location.pathname }, '',);
     }
     // allow the navigation buttons to work
     window.onpopstate = event => {

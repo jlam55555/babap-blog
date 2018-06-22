@@ -55,11 +55,14 @@ $long-transition: 0.3s;
   * author: Miguel Ambrosi
   * https://icons8.com/cssload/en/spinners
   */
-.cssload-container{
+.cssload-container {
   position: relative;
   z-index: 2;
   margin-top: 5em;
   margin-bottom: -64px;
+}
+.cssload-container.lazy-image {
+  margin-top: 1em;
 }
 .cssload-whirlpool,
 .cssload-whirlpool::before,
