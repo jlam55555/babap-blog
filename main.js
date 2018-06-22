@@ -285,7 +285,9 @@ new Vue({
     }
   },
   created() {
-    history.replaceState({ url: '/' }, '', '/');
+    if(history.state == null) {
+      history.replaceState({ url: '/' }, '', '/');
+    }
     // allow the navigation buttons to work
     window.onpopstate = event => {
       this.activatedRoute = window.location.pathname.toLowerCase();
