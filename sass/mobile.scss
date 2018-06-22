@@ -57,7 +57,9 @@ $long-transition: 0.3s;
   */
 .cssload-container{
   position: relative;
+  z-index: 2;
   margin-top: 5em;
+  margin-bottom: -64px;
 }
 .cssload-whirlpool,
 .cssload-whirlpool::before,
@@ -70,7 +72,7 @@ $long-transition: 0.3s;
   border-radius: 974px;
 }
 .cssload-whirlpool {
-  margin: -24px 0 0 -24px;
+  margin: -24px 0 -24px;
   height: 49px;
   width: 49px;
   animation: cssload-rotate 1150ms linear infinite;

@@ -37,9 +37,12 @@ let PostsComponent = {
     <input
       id='search-bar'
       v-model='searchTerm'
-      @change='updateUrl'
+      @change='search'
       placeholder='Search'>
-    <button id='search-button' type='button'>Search</button>
+    <button
+      id='search-button'
+      @click='search'
+      type='button'>Search</button>
     <div class='mobile-flex-break'></div>
     <span id='order-by-text'>Order by:</span>
     <select id='sort-select' v-model='postSort' @change='updateUrl'>
@@ -50,7 +53,10 @@ let PostsComponent = {
       <option value='alphaza'>alphabetical (Z-A)</option>
     </select>
   </div>
-  <loading v-if='posts.length == 0' />
+  <loading v-if='isQuerying' />
+  <div v-else-if='posts.length == 0'>
+    <p>No posts were found matching that query.</p>
+  </div>
   <div v-else>
     <a class='post-item noLink' v-for='post in postList' @click='goto("/posts/" + post.path)'>
       <div class='post-id'>{{ post.id }}</div>
@@ -61,18 +67,18 @@ let PostsComponent = {
       </div>
     </a>
   </div>
-  <!-- force watch computed property -->
-  {{ getParams }}
 </div>`,
-  props: {
-    goto: Function,
-  },
   data() {
     return {
       posts: [],
       postSort: 'datenewold',
       searchTerm: '',
+      isQuerying: true
     };
+  },
+  props: {
+    params: URLSearchParams,
+    goto: Function
   },
   computed: {
     postList() {
@@ -89,10 +95,13 @@ let PostsComponent = {
         default:
           return this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
       }
-    },
-    getParams() {
-      this.searchTerm = this.params.get('q') || '';
-      this.postSort = this.params.get('sort') || 'datenewold';
+    }
+  },
+  watch: {
+    params(newParams) {
+      this.searchTerm = newParams.get('q') || '';
+      this.postSort = newParams.get('sort') || 'datenewold';
+      this.searchNoUpdateUrl();
     }
   },
   methods: {
@@ -100,19 +109,28 @@ let PostsComponent = {
       let searchParam = this.searchTerm.length ? 'q=' + this.searchTerm : '';
       let sortParam = this.postSort == 'datenewold' ? '' : 'sort=' + this.postSort;
       this.goto(`/posts${ searchParam || sortParam ? '?' : '' }${ searchParam && sortParam ? [searchParam, sortParam].join('&') : [searchParam, sortParam].join('') }`);
+    },
+    searchNoUpdateUrl() {
+      // update list when new searchterm is found
+      this.isQuerying = true;
+      get('/scripts/getPostList.php?q=' + this.searchTerm, postData => {
+        this.isQuerying = false;
+        this.posts = postData;
+      });
+    },
+    search() {
+      this.updateUrl();
+      this.searchNoUpdateUrl();
     }
   },
-  props: {
-    params: URLSearchParams,
-    goto: Function
-  },
-  created() {
+  mounted() {
     // get post data
-    get('/scripts/getPostList.php', postData => {
+    this.searchTerm = this.params.get('q') || '';
+    this.postSort = this.params.get('sort') || 'datenewold';
+    get('/scripts/getPostList.php' + (this.searchTerm ? '?q=' + this.searchTerm : ''), postData => {
       this.posts = postData;
+      this.isQuerying = false;
     });
-    console.log(this.params);
-    console.log(this.goto);
   }
 };
 
@@ -259,7 +277,7 @@ new Vue({
   },
   methods: {
     goto: function(newRoute) {
-      history.pushState({ url: this.activatedRoute }, '', newRoute);
+      history.pushState({ url: newRoute }, '', newRoute);
       this.activatedRoute = newRoute;
       // hide and un-hide <address> to avoid visual interference with other animations
       this.isChanging = true;
@@ -267,13 +285,11 @@ new Vue({
     }
   },
   created() {
+    history.replaceState({ url: '/' }, '', '/');
     // allow the navigation buttons to work
-    window.onpopstate = popStateData => {
+    window.onpopstate = event => {
       this.activatedRoute = window.location.pathname.toLowerCase();
       this.searchParams = document.location.search;
     };
-    this.$on('change-route', newRoute => {
-      console.log('test');
-    });
   }
 });
