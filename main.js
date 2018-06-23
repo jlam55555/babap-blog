@@ -231,17 +231,24 @@ let MapComponent = {
   */
 let AboutComponent = {
   template: `<div id='container'>
+  <h3>About BaBaP</h3>
+  <p>You're probably wondering, What is BaBaP? What does it stand for?</p>
+  <p>And the answer is, Not much. Something along the lines of Bits and Bytes and Pieces. Or Bits and Bites and Pieces. Or Bits and Bites and Peaces. Think peace signs, computers (bits and bytes), or cakes (bites and pieces). But it can mean anything that fits the acronym. In other words, it's free-form, in a modern way.</p>
+  <p>The main vision for BaBaP was to create an interactive experience. You can navigate this blog just as you navigate this world: walk around, enter homes or museums, talk to others. Perhaps you even take portals to your favorite exhibit, or to a random part of the world. Unfortunately, this part of BaBaP does not exist yet, in this very early stage.</p>
+  <hr>
   <div class='float-right'>
     <lazy-image src='portrait.jpg' :is-asset='true' :as-image='true'></lazy-image>
     <figcaption>Here's an image. Your portrait could go here.</figcaption>
   </div>
   <h3>Meet the author!</h3>
-  <p>JEssica lam! *magic fingers* *confetti* *lights* *action* (i dunno, you put stuff here)</p>
+  <p>Jessica lam! *jazz hands* *confetti* *lights* *action* (i dunno, you put stuff here)</p>
   <hr>
-  <h3>About BaBaP</h3>
-  <p>You're probably wondering, What is BaBaP? What does it stand for?</p>
-  <p>And the answer is, Not much. Something along the lines of Bits and Bytes and Pieces. Or Bits and Bites and Pieces. Or Bits and Bites and Peaces. Think peace signs, computers (bits and bytes), or cakes (bites and pieces). But it can mean anything that fits the acronym. In other words, it's free-form, in a modern way.</p>
-  <p>The main vision for BaBaP was to create an interactive experience. You can navigate this blog just as you navigate this world: walk around, enter homes or museums, talk to others. Perhaps you even take portals to your favorite exhibit, or to a random part of the world. Unfortunately, this part of BaBaP does not exist yet, in this very early stage.</p>
+  <h3>Meet the <em>&lt;ninja&gt;</em> behind this website.</h3>
+  <p>Jonathan Lam is an ambitious software developer and mathematician whose goal is to make programs that are clean and intuitive, on both the programmer and client ends. He maintains this website and occasionally posts website-related things.</p>
+  <p>Links:</p>
+  <p><a href='//www.jonathanlam.tech' target='_blank'>Personal website</a></p>
+  <p><a href='//eis.jonathanlam.tech' target='_blank'>Blog (EiS)</a></p>
+  <p><a href='//github.com/jlam55555' target='_blank'>GitHub (@jlam55555)</a></p>
 </div>`,
   props: {
     goto: Function
