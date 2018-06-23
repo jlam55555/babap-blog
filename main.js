@@ -91,7 +91,7 @@ let PostsComponent = {
     <p>No posts were found matching that query.</p>
   </div>
   <div v-else>
-    <a class='post-item noLink' v-for='post in postList' @click='goto("/posts/" + post.path)'>
+    <a class='post-item noLink' v-for='post in postList' @click='goto("/posts/" + post.path)' :key='post-id'>
       <div class='post-id'>{{ post.id }}</div>
       <lazy-image class='post-image' :src='post.image'></lazy-image>
       <div class='post-info'>
