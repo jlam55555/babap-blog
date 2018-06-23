@@ -1,7 +1,7 @@
 --- # this is a valid YAML file syntax
 title: Hello, World! # comments are written like this
 path: hello-world
-date: 6/22/18
+date: 6/22/18 12:42
 description: "Blogging is a conversation, not a code." Mike Butcher. Here, we commence a new, modern conversation.
 image: 000.jpg
 author: Jonathan Lam

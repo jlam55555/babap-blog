@@ -53,7 +53,6 @@ Vue.component('lazy-image', {
     let imageUrl = `/${this.isAsset ? 'assets' : '_posts/img'}/${this.src}`;
     let image = new Image();
     image.onload = () => {
-      console.log('loaded');
       this.isLoading = false;
       this.srcString = imageUrl;
       this.styleObject = { backgroundImage: `url(${this.srcString})` };

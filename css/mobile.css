@@ -255,6 +255,9 @@ div.float-right > figcaption {
 #post-body {
   padding: 1em; }
 
+#post-body pre {
+  white-space: pre-wrap; }
+
 #post-data, #post-date, #post-description, #post-title {
   line-height: 1.5; }
 
