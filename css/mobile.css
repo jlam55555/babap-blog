@@ -120,7 +120,7 @@ a {
   cursor: pointer; }
 
 a:not(.noLink) {
-  color: blue;
+  color: darkslategrey;
   text-decoration: underline; }
 
 address {
@@ -241,10 +241,21 @@ div.float-right > figcaption {
   margin: 1em 1em 0 1em; }
 
 #post-body {
-  padding: 1em; }
+  padding: 1em 0; }
+
+#post-body blockquote {
+  padding: 0.5em 1em 0.5em 1.5em;
+  background-color: whitesmoke;
+  margin: 0;
+  border-left: 5px solid darkslategrey; }
+
+#post-body ul > li {
+  list-style-type: circle; }
 
 #post-body pre {
-  white-space: pre-wrap; }
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word; }
 
 #post-data, #post-date, #post-description, #post-title {
   line-height: 1.5; }
@@ -266,6 +277,7 @@ div.float-right > figcaption {
 #post-title {
   margin: 0; }
 
+/* media queries for larger screens (width >= 600px) */
 @media only screen and (min-width: 600px) {
   div.float-right {
     float: right;
