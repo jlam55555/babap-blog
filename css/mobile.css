@@ -115,9 +115,6 @@ body {
 .mobile-flex-break {
   flex-basis: 100%; }
 
-@media only screen and (min-width: 600px) {
-  .mobile-flex-break {
-    flex-basis: 0; } }
 /* default basic tag styles (also all pages) */
 a {
   cursor: pointer; }
@@ -182,12 +179,13 @@ hr {
   position: absolute;
   top: 0;
   left: 0;
-  height: 2em;
-  width: 2em;
-  font-size: 2em;
+  height: 1.5em;
+  width: 1.5em;
+  font-size: 1em;
   text-align: center;
-  color: lightgrey;
-  background-color: grey; }
+  border-bottom-right-radius: 0.33em;
+  background-color: darkslategrey;
+  color: whitesmoke; }
 
 .post-image {
   background-position: center;
@@ -207,18 +205,6 @@ hr {
   flex-direction: column;
   position: relative; }
 
-@media only screen and (min-width: 600px) {
-  .post-image {
-    width: 10em;
-    height: 100%; }
-
-  .post-info {
-    margin-top: 0;
-    margin-left: 11em; }
-
-  .post-item {
-    flex-direction: row;
-    height: 10em; } }
 .post-title, .post-description {
   margin: 0.25em 0; }
 
@@ -227,7 +213,8 @@ hr {
 
 #search-bar {
   flex: 1 0 0;
-  border-right: none; }
+  border-right: none;
+  min-width: 0; }
 
 #search-sort-posts {
   display: flex;
@@ -250,17 +237,6 @@ div.float-right > figcaption {
   margin-top: 1em;
   text-align: center; }
 
-@media only screen and (min-width: 600px) {
-  div.float-right {
-    float: right;
-    margin-left: 2em; }
-
-  div.float-right > img {
-    max-width: 25em;
-    max-height: initial; }
-
-  div.float-right > figcaption {
-    max-width: 25em; } }
 #order-by-text {
   margin: 1em 1em 0 1em; }
 
@@ -287,10 +263,37 @@ div.float-right > figcaption {
   background-position: center;
   margin: 1em 0; }
 
-@media only screen and (min-width: 600px) {
-  #post-image {
-    height: 30em; } }
 #post-title {
   margin: 0; }
+
+@media only screen and (min-width: 600px) {
+  div.float-right {
+    float: right;
+    margin-left: 2em; }
+
+  div.float-right > img {
+    max-width: 25em;
+    max-height: initial; }
+
+  div.float-right > figcaption {
+    max-width: 25em; }
+
+  .mobile-flex-break {
+    flex-basis: 0; }
+
+  #post-image {
+    height: 30em; }
+
+  .post-image {
+    width: 10em;
+    height: 100%; }
+
+  .post-info {
+    margin-top: 0;
+    margin-left: 11em; }
+
+  .post-item {
+    flex-direction: row;
+    height: 10em; } }
 
 /*# sourceMappingURL=mobile.css.map */
