@@ -177,6 +177,7 @@ button, input, select {
   -webkit-appearance: none;
   border-radius: 0;
   padding: 1em;
+  border: 1px solid $main-color;
   outline: none;
 }
 button, select {
@@ -362,9 +363,6 @@ div.float-right > figcaption {
 
 /* media queries for larger screens (width >= 600px) */
 @media only screen and (min-width: 600px) {
-  button, input, select {
-    border: 1px solid $main-color;
-  }
   div.float-right {
     float: right;
     margin-left: 2em;
