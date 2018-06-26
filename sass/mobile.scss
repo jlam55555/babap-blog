@@ -6,18 +6,38 @@ $light-accent-color: lightslategrey;
 $alttext-color: grey;
 $transition: 0.1s;
 $long-transition: 0.3s;
+%activatable-control {
+  border-bottom: 3px solid transparent;
+  border-bottom-width: 3px !important;
+  transition: border-bottom-color $transition !important;
+
+  &:hover, &:focus {
+    cursor: pointer; 
+    border-bottom-color: $light-accent-color !important;
+  }
+}
+%activatable {
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: $light-accent-color;
+    transition: width $long-transition;
+  }
+  &:hover::after, &:focus::after {
+    width: 100%;
+  }
+}
 %card {
   border: 1px solid $main-color;
   padding: 1em;
   margin: 1em 0;
   background-color: white;
   transition: background-color $transition;
-}
-%card:hover, %card:focus {
-  background-color: $subtle-color;
-}
-%card:focus {
-  outline: none;
 }
 %subtext {
   font-size: smaller;
@@ -115,9 +135,10 @@ body {
 }
 #container {
   max-width: 60em;
-  margin: 2em auto;
-  padding: 0 1em;
+  margin: 3em auto 0 auto;
   line-height: 1.5;
+  padding: 1em;
+  overflow: auto;
 }
 // line break horizontal flexbox on small screens
 .mobile-flex-break {
@@ -150,10 +171,16 @@ address.hidden {
   animation-name: fade-in-out-animation;
 }
 button, input, select {
+  @extend %activatable-control;
   font-size: inherit;
   font-family: inherit;
   -webkit-appearance: none;
   border-radius: 0;
+  padding: 1em;
+  outline: none;
+}
+button, select {
+  background-color: $subtle-color;
 }
 hr {
   margin: 2em;
@@ -164,8 +191,11 @@ hr {
 
 /* header styles (also all pages) */
 #nav-bar {
-  display: fixed;
+  position: fixed;
   top: 0;
+  z-index: 2;
+  background-color: white;
+  width: 100%;
   height: 3em;
   display: flex;
   flex-direction: row;
@@ -189,6 +219,13 @@ hr {
 }
 
 /* post list styles (/posts) */
+.post-divider {
+  background-color: $main-color;
+  margin: 1em 0 0.25em 0;
+}
+.post-description {
+  margin: -0.75em 0 2em 0;
+}
 .post-id {
   @extend %vcenter;
   position: absolute;
@@ -206,31 +243,42 @@ hr {
   background-position: center;
   background-size: cover;
   width: 100%;
-  height: 10em;
+  height: 20em;
   position: absolute;
   z-index: -1;
   left: 0;
   top: 0;
 }
 .post-info {
-  margin-top: 11em;
+  margin-top: 21em;
+  flex: 1 0 0;
 }
 .post-item {
   @extend %card;
   @extend %height-in;
   @extend %fade-in;
+  @extend %activatable;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
   display: flex;
   flex-direction: column;
   position: relative;
+  margin: 0 -1em 2em -1em;
 }
-.post-title, .post-description {
-  margin: 0.25em 0;
+.post-title {
+  font-weight: normal;
+  font-size: 1.5em;
+  margin-top: -0.5em;
 }
 .post-path {
   @extend %subtext;
+  text-align: right;
 }
 #search-bar, #search-button, #sort-select {
-  @extend %card; 
+  border-left: none;
+  border-right: none;
+  border-top: none;
   margin: 1em 0 0 0;
 }
 #search-bar {
@@ -241,8 +289,11 @@ hr {
 #search-sort-posts {
   display: flex;
   flex-direction: row;
-  margin-top: -1em;
+  margin: -2em -1em 1em -1em;
   flex-wrap: wrap;
+}
+#sort-select {
+  font-size: smaller;
 }
 
 /* post styles (/posts/*, /about) */
@@ -264,6 +315,7 @@ div.float-right > figcaption {
 #order-by-text {
   @extend %vcenter;
   margin: 1em 1em 0 1em;
+  font-size: smaller;
 }
 #post-body {
   padding: 1em 0;
@@ -303,11 +355,16 @@ div.float-right > figcaption {
   margin: 1em 0;
 }
 #post-title {
+  font-weight: normal;
+  font-size: 1.5em;
   margin: 0;
 }
 
 /* media queries for larger screens (width >= 600px) */
 @media only screen and (min-width: 600px) {
+  button, input, select {
+    border: 1px solid $main-color;
+  }
   div.float-right {
     float: right;
     margin-left: 2em;
@@ -322,19 +379,35 @@ div.float-right > figcaption {
   .mobile-flex-break {
     flex-basis: 0;
   }
+  .post-description {
+    flex: 1 0 0;
+  }
   #post-image {
     height: 30em;
   }
   .post-image {
-    width: 10em;
+    width: 20em;
     height: 100%;
   }
   .post-info {
     margin-top: 0;
-    margin-left: 11em;
+    margin-left: 21em;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-title {
+    margin-top: 1em;
+  }
+  .post-path {
+    flex: 0 1 0;
   }
   .post-item {
     flex-direction: row;
-    height: 10em;
+    height: 20em;
+    border: 1px solid $main-color;
+    margin: 2em 0;
+  }
+  #search-sort-posts {
+    margin: 0;
   }
 }

@@ -97,7 +97,8 @@ let PostsComponent = {
       <div class='post-info'>
         <h3 class='post-title'>{{ post.title }}</h3>
         <p class='post-description'>{{ post.description }}</p>
-        <div class='post-path'>{{ post.author }}<br>/posts/{{ post.path }}</div>
+        <hr class='post-divider'>
+        <div class='post-path'>{{ post.author }}<!--<br>/posts/{{ post.path }} --></div>
       </div>
     </a>
   </div>
